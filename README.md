@@ -1,6 +1,8 @@
 # k8s-vanilla-cluster
-![alt text](image.png)
+
 ----------------------
+
+![alt text](k8s.png)
 
 Kubernetes Vanilla Cluster using `kubeadm`
 
@@ -86,6 +88,14 @@ Run the script `k8s-install.sh` it with the argument `control-plane` to set up t
 ```shell
 ./k8s-install.sh control-plane
 ./k8s-install.sh node
+```
+
+### Prevent workloads from running on the control-plane node
+
+To keep application pods off the control-plane node:
+
+```shell
+kubectl taint nodes $(hostname) node-role.kubernetes.io/control-plane=:NoSchedule
 ```
 
 ## Suggested Articles
