@@ -74,11 +74,18 @@ The script sets up a **self-hosted, Kubernetes "Vanilla" Cluster** using:
 
 ## How to Use
 
-To use this script, run it with the argument `control-plane` to set up the control plane or `node` to set up a worker node:
+Clone this repository, access the repo folder:
 
 ```shell
-./kubernetes-install.sh control-plane
-./kubernetes-install.sh node
+git clone https://github.com/alexolinux/k8s-vanilla-cluster.git
+cd k8s-vanilla-cluster
+```
+
+Run the script `k8s-install.sh` it with the argument `control-plane` to set up the control plane or `node` to set up a worker node:
+
+```shell
+./k8s-install.sh control-plane
+./k8s-install.sh node
 ```
 
 ## Suggested Articles
@@ -87,6 +94,14 @@ To use this script, run it with the argument `control-plane` to set up the contr
 - <https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/>
 - <https://linuxconfig.org/how-to-create-a-kubernetes-cluster>
 - <https://www.digitalocean.com/resources/articles/unmanaged-vs-managed-kubernetes>
+
+## References
+
+- [Kubernetes Official Docs](https://kubernetes.io/docs/home/)
+- [Calico CNI Plugin](https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises)
+- [Flannel NET Plugin](https://github.com/flannel-io/flannel)
+- [Docker](https://docs.docker.com/engine/install/)
+- [docker-compose](https://docs.docker.com/compose/)
 
 ## Author: Alex Mendes
 
