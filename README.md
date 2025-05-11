@@ -60,7 +60,7 @@ This environment is ideal for **lab**, **development**, or **home infrastructure
    - It ensures that the network configuration is compatible with the pod network CIDR and the control plane's API server.
 
 5. **Container Runtime**:
-   - The script supports both Docker and containerd as container runtimes, depending on the user's preference. It installs and configures these runtimes on the nodes.
+   - The script supports containerd as container runtime. It installs and configures the runtime on the nodes.
 
 6. **Compatibility**:
    - The script is compatible with both RHEL-based and Debian/Ubuntu-based systems, automatically detecting the distribution and performing the appropriate installation steps.
