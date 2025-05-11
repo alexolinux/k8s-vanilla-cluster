@@ -88,8 +88,8 @@ When setting up the control plane, the following inputs are required:
    - **Validation**: The script checks if the provided interface exists on the system.
 
 2. **POD CIDR**:
-   - **Prompt**: `Enter the PODs CIDR (Default: 10.10.0.0/16):`
-   - **Description**: The CIDR range for pod networking. If no input is provided, the default value (`10.10.0.0/16`) is used.
+   - **Prompt**: `Enter the PODs CIDR (Default: 10.244.0.0/16):`
+   - **Description**: The CIDR range for pod networking. If no input is provided, the default value (`10.244.0.0/16`) is used.
 
 3. **Network Plugin Version**:
    - **Prompt**:
@@ -134,8 +134,8 @@ When setting up a worker node, the following inputs are required:
 ```shell
 Enter the Interface Name (i.e.: eth0): eth0
 Using interface: eth0
-Enter the PODs CIDR (Default: 10.10.0.0/16): 
-Using default POD CIDR: 10.10.0.0/16
+Enter the PODs CIDR (Default: 10.244.0.0/16): 
+Using default POD CIDR: 10.244.0.0/16
 Choose a network plugin to install:
 1) Calico
 2) Flannel
