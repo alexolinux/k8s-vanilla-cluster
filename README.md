@@ -189,7 +189,7 @@ kubectl taint nodes $(hostname) node-role.kubernetes.io/control-plane=:NoSchedul
 
 - [Kubernetes Official Docs](https://kubernetes.io/docs/home/)
 - [Calico CNI Plugin](https://docs.tigera.io/calico/latest/getting-started/kubernetes/self-managed-onprem/onpremises)
-- [Flannel NET Plugin](https://github.com/flannel-io/flannel)
+- [Flannel CNI Plugin](https://github.com/flannel-io/flannel)
 - [Docker](https://docs.docker.com/engine/install/)
 - [docker-compose](https://docs.docker.com/compose/)
 
