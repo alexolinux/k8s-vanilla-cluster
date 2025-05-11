@@ -13,7 +13,7 @@
 # If option is "control-plane": IFACE is required
 # Define according to the Interface Name (i.e.: eth0, wlan0, etc).
 IFACE=""
-POD_CIDR="10.10.0.0/16"
+POD_CIDR="10.244.0.0/16"
 
 # If option is "node": The following variables are required.
 # PORT (usually the default is 6443).
@@ -527,7 +527,7 @@ initialize_control_plane() {
 	fi
 
 	IP=$(ip addr show $IFACE | grep -oP 'inet \K[\d.]+')
-	#sudo kubeadm init --pod-network-cidr=10.10.0.0/16 --apiserver-advertise-address=${IP}
+	#sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=${IP}
 	sudo kubeadm init \
 		--pod-network-cidr="${POD_CIDR}" \
 		--apiserver-advertise-address="${IP}"
