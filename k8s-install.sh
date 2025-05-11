@@ -51,59 +51,83 @@ usage() {
 }
 
 # Input User for Control Plane
-while true; do
-	read -p "Enter the Interface Name (i.e.: eth0): " IFACE
-	if [ -n "$IFACE" ]; then
-		if ip link show "$IFACE" > /dev/null 2>&1; then
-			break
-		else
-			echo "Error: Interface '$IFACE' does not exist or is not recognized. Please try again."
-		fi
-	else
-		echo "Error: Interface Name cannot be empty. Please try again."
-	fi
-done
+get_interface_name() {
+  while true; do
+    read -p "Enter the Interface Name (i.e.: eth0): " IFACE
+    if [ -n "$IFACE" ]; then
+      if ip link show "$IFACE" > /dev/null 2>&1; then
+        echo "Using interface: $IFACE"
+        break
+      else
+        echo "Error: Interface '$IFACE' does not exist or is not recognized. Please try again."
+      fi
+    else
+      echo "Error: Interface Name cannot be empty. Please try again."
+    fi
+  done
+}
 
-read -p "Enter the PODs CIDR (Default: $POD_CIDR): " USER_CIDR
-if [ -z "$USER_CIDR" ]; then
-  POD_CIDR="$POD_CIDR"
-else
-  POD_CIDR="$USER_CIDR"
-fi
+get_pod_cidr() {
+  read -p "Enter the PODs CIDR (Default: $POD_CIDR): " USER_CIDR
+  if [ -z "$USER_CIDR" ]; then
+    echo "Using default POD CIDR: $POD_CIDR"
+  else
+    POD_CIDR="$USER_CIDR"
+    echo "Using user-provided POD CIDR: $POD_CIDR"
+  fi
+}
 
 # Input User for Worker Node
-read -p "Enter the PORT (Default: $PORT): " USER_PORT
-if [ -z "$USER_PORT" ]; then
-  PORT="$PORT"
-else
-  PORT="$USER_PORT"
-fi
+get_port() {
+  read -p "Enter the PORT (Default: $PORT): " USER_PORT
+  if [ -z "$USER_PORT" ]; then
+    echo "Using default PORT: $PORT"
+  else
+    PORT="$USER_PORT"
+    echo "Using user-provided PORT: $PORT"
+  fi
+}
 
-while true; do
-	read -p "Enter the Control Plane IP Address: " CONTROL_PLANE
-	if [[ -n "$CONTROL_PLANE" && "$CONTROL_PLANE" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
-		# Validate if the IP address is reachable
-		if ping -c 1 -W 1 "$CONTROL_PLANE" > /dev/null 2>&1; then
-			break
-		else
-			echo "Error: IP address '$CONTROL_PLANE' is not reachable. Please try again."
-		fi
-	else
-		echo "Error: Invalid or empty IP address. Please enter a valid IP address."
-	fi
-done
+get_control_plane_ip() {
+  while true; do
+    read -p "Enter the Control Plane IP Address: " CONTROL_PLANE
+    if [[ -n "$CONTROL_PLANE" && "$CONTROL_PLANE" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
+      # Validate if the IP address is reachable
+      if ping -c 1 -W 1 "$CONTROL_PLANE" > /dev/null 2>&1; then
+        echo "Using Control Plane IP Address: $CONTROL_PLANE"
+        break
+      else
+        echo "Error: IP address '$CONTROL_PLANE' is not reachable. Please try again."
+      fi
+    else
+      echo "Error: Invalid or empty IP address. Please enter a valid IP address."
+    fi
+  done
+}
 
-read -p "Enter the Control-Plane TOKEN: " TOKEN
-if [ -z "$TOKEN" ]; then
-	echo "Error: TOKEN cannot be empty. Please try again."
-	exit 1
-fi
+get_control_plane_token() {
+  while true; do
+    read -p "Enter the Control-Plane TOKEN: " TOKEN
+    if [ -z "$TOKEN" ]; then
+      echo "Error: TOKEN cannot be empty. Please try again."
+    else
+      echo "Using Control-Plane TOKEN: $TOKEN"
+      break
+    fi
+  done
+}
 
-read -p "Enter the Control-Plane HASH: " HASH
-if [ -z "$HASH" ]; then
-	echo "Error: HASH cannot be empty. Please try again."
-	exit 1
-fi
+get_control_plane_hash() {
+  while true; do
+    read -p "Enter the Control-Plane HASH: " HASH
+    if [ -z "$HASH" ]; then
+      echo "Error: HASH cannot be empty. Please try again."
+    else
+      echo "Using Control-Plane HASH: $HASH"
+      break
+    fi
+  done
+}
 
 # Function to prompt and validate Kubernetes version
 get_kube_version() {
@@ -594,6 +618,8 @@ fi
 
 case $1 in
 	control-plane)
+		get_interface_name
+		get_pod_cidr
 		prereq_kernel
 		prereq_params
 		initialize_control_plane
@@ -603,6 +629,10 @@ case $1 in
 		ask_install_compose
 		;;
 	node)
+		get_port
+		get_control_plane_ip
+		get_control_plane_token
+		get_control_plane_hash
 		prereq_kernel
 		prereq_params
 		join_node
