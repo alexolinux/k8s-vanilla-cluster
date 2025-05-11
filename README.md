@@ -8,7 +8,7 @@ Kubernetes Vanilla Cluster using `kubeadm`
 
 ## Purpose
 
-This is a K8s Project to build and automate Kubernetes cluster with a control plane and worker nodes. It supports both RHEL-based and Debian/Ubuntu-based Linux distributions. The script simplifies the process of setting up a Kubernetes cluster for local or small-scale environments, providing a straightforward way to get started with Kubernetes deployment.
+This is a K8s lightweight automation Project to build and automate Kubernetes cluster with a control plane and worker nodes. It supports both RHEL-based and Debian/Ubuntu-based Linux distributions. The script simplifies the process of setting up a Kubernetes cluster for local or small-scale environments, providing a straightforward way to get started with Kubernetes deployment.
 
 ## Context: K8s Vanilla x Cloud Providers
 
