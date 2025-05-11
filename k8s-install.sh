@@ -44,6 +44,8 @@ FLANNEL_VERSION="v0.26.7"
 # https://github.com/docker/compose/releases
 DC_VER="v2.36.0"
 
+# ShellScript Functions
+
 # K8s Type: control-plane|node
 usage() {
 	echo "Usage: $0 <control-plane|node>"
@@ -226,21 +228,6 @@ ask_install_compose() {
   done
 }
 
-# Environment PATH
-echo "Checking PATH..."
-LOCAL_BIN="/usr/local/bin"
-PROFILE_D_SCRIPT="/etc/profile.d/add_usr_local_bin.sh"
-
-# Add /usr/local/bin to the PATH for the current session if not already present
-if [[ ":$PATH:" != *":$LOCAL_BIN:"* ]]; then
-	export PATH=$PATH:$LOCAL_BIN
-
-	# Create the script in /etc/profile.d if it doesn't exist
-	[ -f "$PROFILE_D_SCRIPT" ] || { echo -e "#!/bin/bash\nexport PATH=\$PATH:$LOCAL_BIN" | sudo tee "$PROFILE_D_SCRIPT" > /dev/null; sudo chmod +x "$PROFILE_D_SCRIPT"; echo "Script added to $PROFILE_D_SCRIPT to persist across sessions."; }
-else
-	echo "$LOCAL_BIN is already in the PATH for the current session."
-fi
-
 #-- ------------------------ --
 #-- Prereqs for installation --
 #-- ------------------------ --
@@ -268,6 +255,27 @@ net.ipv4.ip_forward                 = 1
 EOF
 
 	sudo sysctl --system
+}
+
+# Environment PATH
+environment() {
+  echo "Checking PATH..."
+  LOCAL_BIN="/usr/local/bin"
+  PROFILE_D_SCRIPT="/etc/profile.d/add_usr_local_bin.sh"
+
+  # Add /usr/local/bin to the PATH for the current session if not already present
+  if [[ ":$PATH:" != *":$LOCAL_BIN:"* ]]; then
+    export PATH=$PATH:$LOCAL_BIN
+
+    # Create the script in /etc/profile.d if it doesn't exist
+    if [ ! -f "$PROFILE_D_SCRIPT" ]; then
+      echo -e "#!/bin/bash\nexport PATH=\$PATH:$LOCAL_BIN" | sudo tee "$PROFILE_D_SCRIPT" > /dev/null
+      sudo chmod +x "$PROFILE_D_SCRIPT"
+      echo "Script added to $PROFILE_D_SCRIPT to persist across sessions."
+    fi
+  else
+    echo "$LOCAL_BIN is already in the PATH for the current session."
+  fi
 }
 
 #-- --------------------------------------------------- --
@@ -622,6 +630,7 @@ case $1 in
 		get_pod_cidr
 		prereq_kernel
 		prereq_params
+		environment
 		initialize_control_plane
 		kube_user_config
 		install_network_plugin
@@ -635,6 +644,7 @@ case $1 in
 		get_control_plane_hash
 		prereq_kernel
 		prereq_params
+		environment
 		join_node
 		ask_install_docker
 		ask_install_compose
