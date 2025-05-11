@@ -56,7 +56,7 @@ This environment is ideal for **lab**, **development**, or **home infrastructure
    - It configures the necessary container runtime and Kubernetes components for the worker node to function properly within the cluster.
 
 4. **Networking Setup**:
-   - The script installs a network plugin (Calico by default) to enable pod-to-pod communication across the cluster.
+   - The script installs a network plugin (Calico or Flannel) to enable pod-to-pod communication across the cluster.
    - It ensures that the network configuration is compatible with the pod network CIDR and the control plane's API server.
 
 5. **Container Runtime**:
