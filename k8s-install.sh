@@ -561,7 +561,11 @@ install_network_plugin() {
       # Prompt for Calico version
       get_calico_version
       echo "Installing Calico plugin (version: $CALICO_VERSION)..."
-      kubectl apply -f "https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/calico.yaml"
+
+			CALICO_MANIFEST="calico.yaml"
+
+      kubectl apply -f "https://raw.githubusercontent.com/projectcalico/calico/${CALICO_VERSION}/manifests/${CALICO_MANIFEST}"
+			
       if [ $? -ne 0 ]; then
         echo "Error: Unable to install Calico network plugin."
         exit 1
@@ -571,11 +575,22 @@ install_network_plugin() {
       # Prompt for Flannel version
       get_flannel_version
       echo "Installing Flannel plugin (version: $FLANNEL_VERSION)..."
-      kubectl apply -f "https://github.com/flannel-io/flannel/releases/download/${FLANNEL_VERSION}/kube-flannel.yml"
-      if [ $? -ne 0 ]; then
-        echo "Error: Unable to install Flannel network plugin."
-        exit 1
-      fi
+
+			FLANNEL_MANIFEST="kube-flannel.yml"
+			curl -LO "https://github.com/flannel-io/flannel/releases/download/${FLANNEL_VERSION}/${FLANNEL_MANIFEST}"
+
+			# Adjust Flannel's Network to match custom Pod CIDR if needed
+			if [[ "$POD_CIDR" != "10.244.0.0/16" ]]; then
+				echo "Patching Flannel manifest to use custom Pod CIDR: $POD_CIDR"
+				sed -i "s|\"Network\": \"10.244.0.0/16\"|\"Network\": \"$POD_CIDR\"|" "$FLANNEL_MANIFEST"
+			fi
+
+			kubectl apply -f "$FLANNEL_MANIFEST"
+
+			if [ $? -ne 0 ]; then
+				echo "Error: Unable to install Flannel network plugin."
+				exit 1
+			fi
       ;;
     *)
       echo "Invalid choice. Please run the script again and choose a valid option."
