@@ -171,7 +171,6 @@ For CKA/CKAD lab practice, the `control-plane` installation now includes the fol
 - **Metrics Server**: For resource monitoring using `kubectl top`.
 - **NGINX Ingress Controller**: To manage external access to HTTP services in the cluster.
 - **Local Path Provisioner**: For dynamic volume provisioning in a single-node setup.
-- **Sample NGINX Application**: A simple `nginx` deployment is created and exposed as a `ClusterIP` service for testing purposes.
 
 A sample `NetworkPolicy` is also provided in the `network-policy.yaml` file. You can apply it to your cluster to test network policies:
 
