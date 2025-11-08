@@ -614,6 +614,28 @@ join_node() {
 }
 
 #-- ------------------------------- --
+#-- CKA/CKAD Labs Addons ---------- --
+#-- ------------------------------- --
+
+install_cka_addons() {
+	echo "Installing CKA/CKAD Labs Addons..."
+
+	# Metrics Server
+	echo "Installing Metrics Server..."
+	kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+	# Ingress Controller (NGINX)
+	echo "Installing NGINX Ingress Controller..."
+	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/baremetal/deploy.yaml
+
+	# Storage Provisioner (local-path)
+	echo "Installing local-path Storage Provisioner..."
+	kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.30/deploy/local-path-storage.yaml
+	kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+}
+
+#-- ------------------------------- --
 #-- Main Shell Script ------------- --
 #-- ------------------------------- --
 
@@ -649,6 +671,7 @@ case $1 in
 		initialize_control_plane
 		kube_user_config
 		install_network_plugin
+		install_cka_addons
 		ask_install_docker
 		ask_install_compose
 		;;

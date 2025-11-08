@@ -164,6 +164,21 @@ Run the script `k8s-install.sh` it with the argument `control-plane` to set up t
 ./k8s-install.sh node
 ```
 
+### CKA/CKAD Labs Additions
+
+For CKA/CKAD lab practice, the `control-plane` installation now includes the following additions to enhance the lab environment:
+
+- **Metrics Server**: For resource monitoring using `kubectl top`.
+- **NGINX Ingress Controller**: To manage external access to HTTP services in the cluster.
+- **Local Path Provisioner**: For dynamic volume provisioning in a single-node setup.
+- **Sample NGINX Application**: A simple `nginx` deployment is created and exposed as a `ClusterIP` service for testing purposes.
+
+A sample `NetworkPolicy` is also provided in the `network-policy.yaml` file. You can apply it to your cluster to test network policies:
+
+```shell
+kubectl apply -f network-policy.yaml
+```
+
 ### Control-Plane info
 
 After installing control-plane, the output will provide you the **Token/Hash** required by Workers:
